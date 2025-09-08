@@ -1,0 +1,33 @@
+{
+  "name": "ec-svg2font",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "directories": {
+    "src": "src",
+    "test": "tests"
+  },
+  "scripts": {
+    "dev": "ts-node tests/run.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "commander": "^14.0.0",
+    "svg2ttf": "^6.0.3",
+    "svgicons2svgfont": "^15.0.1",
+    "ttf2eot": "^3.1.0",
+    "ttf2woff": "^3.0.0",
+    "ttf2woff2": "^8.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.1",
+    "@types/svg2ttf": "^5.0.3",
+    "@types/ttf2eot": "^2.0.2",
+    "@types/ttf2woff": "^2.0.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2"
+  }
+}
