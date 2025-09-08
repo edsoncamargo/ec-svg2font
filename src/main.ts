@@ -73,9 +73,8 @@ export class FontGenerator {
     const allFiles = fs
       .readdirSync(this.inputDir)
       .filter((f) => f.endsWith('.svg'));
-    this.newFiles = allFiles.filter(
-      (f) =>
-        !this.filteredMapping.find((m) => m.name === path.basename(f, '.svg'))
+    this.newFiles = allFiles.filter((f) =>
+      not(this.filteredMapping.find((m) => m.name === path.basename(f, '.svg')))
     );
 
     const oldGlyphs: FileGlyph[] = this.filteredMapping.map((m) => ({
