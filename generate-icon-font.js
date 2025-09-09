@@ -27,9 +27,12 @@ async function getPathsFromSVG(filePath) {
   const paths = [];
 
   function traverse(node) {
+    // Adiciona o path se for um elemento 'path'
     if (node.name === 'path' && node.attributes?.d) {
       paths.push(node.attributes.d);
-    } else if (
+    }
+    // Converte e adiciona o path se for um elemento 'circle'
+    else if (
       node.name === 'circle' &&
       node.attributes?.cx &&
       node.attributes?.cy &&
@@ -40,10 +43,11 @@ async function getPathsFromSVG(filePath) {
         r * 2
       },0a${r},${r} 0 1,0 -${r * 2},0`;
       paths.push(d);
-    } else if (node.name === 'g') {
-      if (node.children) node.children.forEach(traverse);
     }
-    if (node.children) node.children.forEach(traverse);
+    // Percorre os filhos se houverem, independente do tipo de elemento
+    if (node.children) {
+      node.children.forEach(traverse);
+    }
   }
 
   traverse(svgJson);
@@ -143,7 +147,10 @@ const svgFontWriteStream = fs.createWriteStream(svgFontPath);
 fontStream.pipe(svgFontWriteStream);
 
 icomoonJson.icons.forEach((icon) => {
-  const svgContent = `<svg><path d="${icon.icon.paths.join(' ')}"/></svg>`;
+  // Modify this line to include the fill-rule attribute
+  const svgContent = `<svg><path fill-rule="evenodd" d="${icon.icon.paths.join(
+    ' '
+  )}"/></svg>`;
   const glyphStream = new Readable();
   glyphStream.push(svgContent);
   glyphStream.push(null);
@@ -187,8 +194,8 @@ svgFontWriteStream.on('finish', async () => {
   font-family: '${FONT_NAME}';
   src: url('${FONT_NAME}.eot');
   src: url('${FONT_NAME}.eot?#iefix') format('embedded-opentype'),
-       url('${FONT_NAME}.woff') format('woff'),
-       url('${FONT_NAME}.ttf') format('truetype');
+    url('${FONT_NAME}.woff') format('woff'),
+    url('${FONT_NAME}.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }\n\n`;

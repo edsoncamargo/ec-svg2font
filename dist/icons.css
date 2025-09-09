@@ -2,8 +2,8 @@
   font-family: 'icons';
   src: url('icons.eot');
   src: url('icons.eot?#iefix') format('embedded-opentype'),
-       url('icons.woff') format('woff'),
-       url('icons.ttf') format('truetype');
+    url('icons.woff') format('woff'),
+    url('icons.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
@@ -12,3 +12,6 @@
 .brad-icon-a-solid-full:before { content: "\f0c3"; }
 .brad-icon-ui-minus:before { content: "\f0c4"; }
 .brad-icon-feedback-check-box:before { content: "\f0c5"; }
+.brad-icon-feedback-error-disabled:before { content: "\f0c6"; }
+.brad-icon-feedback-view-off:before { content: "\f0c7"; }
+.brad-icon-feedback-view-on:before { content: "\f0c8"; }
