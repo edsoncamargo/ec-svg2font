@@ -8,10 +8,176 @@
   font-style: normal;
 }
 
-.brad-icon-sign-hanging:before { content: "\f0c2"; }
-.brad-icon-a-solid-full:before { content: "\f0c3"; }
-.brad-icon-ui-minus:before { content: "\f0c4"; }
-.brad-icon-feedback-check-box:before { content: "\f0c5"; }
-.brad-icon-feedback-error-disabled:before { content: "\f0c6"; }
-.brad-icon-feedback-view-off:before { content: "\f0c7"; }
-.brad-icon-feedback-view-on:before { content: "\f0c8"; }
+.brad-icon-sign {
+  position: relative;
+  display: inline-block; /* Ou outro display apropriado */
+  width: 1em; /* Define um tamanho base, pode ser ajustado */
+  height: 1em;
+  vertical-align: middle; /* Alinha corretamente com texto */
+}
+
+.brad-icon-sign::before {
+  content: "\f0c2";
+  font-family: 'icons';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  color: currentColor; /* Define a cor original da camada */
+}
+
+.brad-icon-a-solid-full {
+  position: relative;
+  display: inline-block; /* Ou outro display apropriado */
+  width: 1em; /* Define um tamanho base, pode ser ajustado */
+  height: 1em;
+  vertical-align: middle; /* Alinha corretamente com texto */
+}
+
+.brad-icon-a-solid-full::before {
+  content: "\f0c9";
+  font-family: 'icons';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  color: currentColor; /* Define a cor original da camada */
+}
+
+.brad-icon-feedback-check-box {
+  position: relative;
+  display: inline-block; /* Ou outro display apropriado */
+  width: 1em; /* Define um tamanho base, pode ser ajustado */
+  height: 1em;
+  vertical-align: middle; /* Alinha corretamente com texto */
+}
+
+.brad-icon-feedback-check-box::before {
+  content: "\f0ca";
+  font-family: 'icons';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  color: #5cbd68; /* Define a cor original da camada */
+}
+.brad-icon-feedback-check-box::after {
+  content: "\f0cb";
+  font-family: 'icons';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  color: #fff; /* Define a cor original da camada */
+}
+
+.brad-icon-feedback-error-disabled {
+  position: relative;
+  display: inline-block; /* Ou outro display apropriado */
+  width: 1em; /* Define um tamanho base, pode ser ajustado */
+  height: 1em;
+  vertical-align: middle; /* Alinha corretamente com texto */
+}
+
+.brad-icon-feedback-error-disabled::before {
+  content: "\f0cc";
+  font-family: 'icons';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  color: #a7a8ac; /* Define a cor original da camada */
+}
+.brad-icon-feedback-error-disabled::after {
+  content: "\f0cd";
+  font-family: 'icons';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  color: #fff; /* Define a cor original da camada */
+}
+
+.brad-icon-feedback-view-off {
+  position: relative;
+  display: inline-block; /* Ou outro display apropriado */
+  width: 1em; /* Define um tamanho base, pode ser ajustado */
+  height: 1em;
+  vertical-align: middle; /* Alinha corretamente com texto */
+}
+
+.brad-icon-feedback-view-off::before {
+  content: "\f0ce";
+  font-family: 'icons';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  color: #3b69ff; /* Define a cor original da camada */
+}
+.brad-icon-feedback-view-off::after {
+  content: "\f0cf";
+  font-family: 'icons';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  color: #fff; /* Define a cor original da camada */
+}
+
+.brad-icon-feedback-view-on {
+  position: relative;
+  display: inline-block; /* Ou outro display apropriado */
+  width: 1em; /* Define um tamanho base, pode ser ajustado */
+  height: 1em;
+  vertical-align: middle; /* Alinha corretamente com texto */
+}
+
+.brad-icon-feedback-view-on::before {
+  content: "\f0d0";
+  font-family: 'icons';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  color: #e1173f; /* Define a cor original da camada */
+}
+.brad-icon-feedback-view-on::after {
+  content: "\f0d1";
+  font-family: 'icons';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  color: #fff; /* Define a cor original da camada */
+}
+
+.brad-icon-ui-minus {
+  position: relative;
+  display: inline-block; /* Ou outro display apropriado */
+  width: 1em; /* Define um tamanho base, pode ser ajustado */
+  height: 1em;
+  vertical-align: middle; /* Alinha corretamente com texto */
+}
+
+.brad-icon-ui-minus::before {
+  content: "\f0d2";
+  font-family: 'icons';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  color: #cc092f; /* Define a cor original da camada */
+}
+

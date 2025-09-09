@@ -8,9 +8,16 @@
 <style>
 body { font-family: sans-serif; padding: 20px; }
 .icon-container { display: flex; flex-wrap: wrap; }
-.icon-box { width: 100px; text-align: center; margin: 10px; }
-.icon-box span { font-family: 'icons'; font-size: 16px; display: block; margin-bottom: 5px; }
-.icon-name { font-size: 12px; word-break: break-all; }
+.icon-box { width: 120px; text-align: center; margin: 10px; border: 1px solid #eee; padding: 10px; }
+.icon-box span.icon-display {
+  font-family: 'icons';
+  font-size: 32px; /* Tamanho maior para visualização */
+  display: block;
+  margin-bottom: 10px;
+  color: #333; /* Cor padrão para o container */
+}
+.icon-name { font-size: 12px; word-break: break-all; display: block; margin-top: 5px;}
+.icon-layer-info { font-size: 10px; color: #777; margin-top: 2px; }
 </style>
 </head>
 <body>
@@ -18,40 +25,40 @@ body { font-family: sans-serif; padding: 20px; }
 <div class="icon-container">
 
 <div class="icon-box">
-  <span class="brad-icon-sign-hanging"></span>
-  <span class="icon-name">sign-hanging - </br> /61634 </span>
-</div>
-
+  <span class="brad-icon-sign">
+    </span>
+  <span class="icon-name">sign</span>
+<span class="icon-layer-info">Camada 0: sign-hanging (cor: transparent)</span></div>
 <div class="icon-box">
-  <span class="brad-icon-a-solid-full"></span>
-  <span class="icon-name">a-solid-full - </br> /61635 </span>
-</div>
-
+  <span class="brad-icon-a-solid-full">
+    </span>
+  <span class="icon-name">a-solid-full</span>
+<span class="icon-layer-info">Camada 0: a-solid-full-0 (cor: currentColor)</span></div>
 <div class="icon-box">
-  <span class="brad-icon-ui-minus"></span>
-  <span class="icon-name">ui-minus - </br> /61636 </span>
-</div>
-
+  <span class="brad-icon-feedback-check-box">
+    </span>
+  <span class="icon-name">feedback-check-box</span>
+<span class="icon-layer-info">Camada 0: feedback-check-box-0 (cor: #5cbd68)</span><span class="icon-layer-info">Camada 1: feedback-check-box-1 (cor: #fff)</span></div>
 <div class="icon-box">
-  <span class="brad-icon-feedback-check-box"></span>
-  <span class="icon-name">feedback-check-box - </br> /61637 </span>
-</div>
-
+  <span class="brad-icon-feedback-error-disabled">
+    </span>
+  <span class="icon-name">feedback-error-disabled</span>
+<span class="icon-layer-info">Camada 0: feedback-error-disabled-0 (cor: #a7a8ac)</span><span class="icon-layer-info">Camada 1: feedback-error-disabled-1 (cor: #fff)</span></div>
 <div class="icon-box">
-  <span class="brad-icon-feedback-error-disabled"></span>
-  <span class="icon-name">feedback-error-disabled - </br> /61638 </span>
-</div>
-
+  <span class="brad-icon-feedback-view-off">
+    </span>
+  <span class="icon-name">feedback-view-off</span>
+<span class="icon-layer-info">Camada 0: feedback-view-off-0 (cor: #3b69ff)</span><span class="icon-layer-info">Camada 1: feedback-view-off-1 (cor: #fff)</span></div>
 <div class="icon-box">
-  <span class="brad-icon-feedback-view-off"></span>
-  <span class="icon-name">feedback-view-off - </br> /61639 </span>
-</div>
-
+  <span class="brad-icon-feedback-view-on">
+    </span>
+  <span class="icon-name">feedback-view-on</span>
+<span class="icon-layer-info">Camada 0: feedback-view-on-0 (cor: #e1173f)</span><span class="icon-layer-info">Camada 1: feedback-view-on-1 (cor: #fff)</span></div>
 <div class="icon-box">
-  <span class="brad-icon-feedback-view-on"></span>
-  <span class="icon-name">feedback-view-on - </br> /61640 </span>
-</div>
-
+  <span class="brad-icon-ui-minus">
+    </span>
+  <span class="icon-name">ui-minus</span>
+<span class="icon-layer-info">Camada 0: ui-minus-0 (cor: #cc092f)</span></div>
 </div>
 </body>
 </html>

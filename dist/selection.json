@@ -1,0 +1,372 @@
+{
+  "icons": [
+    {
+      "icon": {
+        "paths": [
+          "M96 0c17.7 0 32 14.3 32 32l0 32 352 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-352 0 0 352c0 17.7-14.3 32-32 32s-32-14.3-32-32l0-352-32 0C14.3 128 0 113.7 0 96S14.3 64 32 64l32 0 0-32C64 14.3 78.3 0 96 0zM208 176l240 0c17.7 0 32 14.3 32 32l0 144c0 17.7-14.3 32-32 32l-240 0c-17.7 0-32-14.3-32-32l0-144c0-17.7 14.3-32 32-32z"
+        ],
+        "attrs": [
+          {}
+        ],
+        "isMulticolor": false,
+        "isMulticolor2": false,
+        "tags": [
+          "sign-hanging"
+        ]
+      },
+      "attrs": [
+        {}
+      ],
+      "properties": {
+        "order": 1995,
+        "id": 1991,
+        "name": "sign-hanging",
+        "code": 61634
+      },
+      "setIdx": 0,
+      "setId": 2,
+      "iconIdx": 1986
+    },
+    {
+      "icon": {
+        "paths": [
+          "M349.5 115.7C344.6 103.8 332.9 96 320 96C307.1 96 295.4 103.8 290.5 115.7C197.2 339.7 143.8 467.7 130.5 499.7C123.7 516 131.4 534.7 147.7 541.5C164 548.3 182.7 540.6 189.5 524.3L221.3 448L418.6 448L450.4 524.3C457.2 540.6 475.9 548.3 492.2 541.5C508.5 534.7 516.2 516 509.4 499.7C496.1 467.7 442.7 339.7 349.4 115.7zM392 384L248 384L320 211.2L392 384z"
+        ],
+        "attrs": [
+          {
+            "fill": "currentColor"
+          }
+        ],
+        "isMulticolor": false,
+        "isMulticolor2": false,
+        "grid": 0,
+        "tags": [
+          "a-solid-full",
+          "a-solid-full-0"
+        ]
+      },
+      "attrs": [
+        {
+          "fill": "currentColor"
+        }
+      ],
+      "properties": {
+        "order": 2002,
+        "id": 1998,
+        "name": "a-solid-full-0",
+        "prevSize": 32,
+        "code": 61641
+      },
+      "setIdx": 0,
+      "setId": 2,
+      "iconIdx": 1993
+    },
+    {
+      "icon": {
+        "paths": [
+          "M8,8m-8,0a8,8 0 1,0 16,0a8,8 0 1,0 -16,0"
+        ],
+        "attrs": [
+          {
+            "fill": "#5cbd68"
+          }
+        ],
+        "isMulticolor": false,
+        "isMulticolor2": false,
+        "grid": 0,
+        "tags": [
+          "feedback-check-box",
+          "feedback-check-box-0"
+        ]
+      },
+      "attrs": [
+        {
+          "fill": "#5cbd68"
+        }
+      ],
+      "properties": {
+        "order": 2003,
+        "id": 1999,
+        "name": "feedback-check-box-0",
+        "prevSize": 32,
+        "code": 61642
+      },
+      "setIdx": 0,
+      "setId": 2,
+      "iconIdx": 1994
+    },
+    {
+      "icon": {
+        "paths": [
+          "M12.354,5.414l-5.7,5.7a.375.375,0,0,1-.531,0L3.646,8.64a.375.375,0,0,1,.53-.53l2.21,2.211,5.438-5.438a.375.375,0,0,1,.53.531Z"
+        ],
+        "attrs": [
+          {
+            "fill": "#fff"
+          }
+        ],
+        "isMulticolor": false,
+        "isMulticolor2": false,
+        "grid": 0,
+        "tags": [
+          "feedback-check-box",
+          "feedback-check-box-1"
+        ]
+      },
+      "attrs": [
+        {
+          "fill": "#fff"
+        }
+      ],
+      "properties": {
+        "order": 2004,
+        "id": 2000,
+        "name": "feedback-check-box-1",
+        "prevSize": 32,
+        "code": 61643
+      },
+      "setIdx": 0,
+      "setId": 2,
+      "iconIdx": 1995
+    },
+    {
+      "icon": {
+        "paths": [
+          "M8,8m-8,0a8,8 0 1,0 16,0a8,8 0 1,0 -16,0"
+        ],
+        "attrs": [
+          {
+            "fill": "#a7a8ac"
+          }
+        ],
+        "isMulticolor": false,
+        "isMulticolor2": false,
+        "grid": 0,
+        "tags": [
+          "feedback-error-disabled",
+          "feedback-error-disabled-0"
+        ]
+      },
+      "attrs": [
+        {
+          "fill": "#a7a8ac"
+        }
+      ],
+      "properties": {
+        "order": 2005,
+        "id": 2001,
+        "name": "feedback-error-disabled-0",
+        "prevSize": 32,
+        "code": 61644
+      },
+      "setIdx": 0,
+      "setId": 2,
+      "iconIdx": 1996
+    },
+    {
+      "icon": {
+        "paths": [
+          "M11.181,4.819a.374.374,0,0,1,0,.53L8.53,8l2.651,2.651a.375.375,0,0,1-.53.531L8,8.531l-2.651,2.65a.375.375,0,0,1-.53-.53L7.469,8,4.818,5.349a.375.375,0,0,1,.531-.53L8,7.47l2.651-2.651A.374.374,0,0,1,11.181,4.819Z"
+        ],
+        "attrs": [
+          {
+            "fill": "#fff"
+          }
+        ],
+        "isMulticolor": false,
+        "isMulticolor2": false,
+        "grid": 0,
+        "tags": [
+          "feedback-error-disabled",
+          "feedback-error-disabled-1"
+        ]
+      },
+      "attrs": [
+        {
+          "fill": "#fff"
+        }
+      ],
+      "properties": {
+        "order": 2006,
+        "id": 2002,
+        "name": "feedback-error-disabled-1",
+        "prevSize": 32,
+        "code": 61645
+      },
+      "setIdx": 0,
+      "setId": 2,
+      "iconIdx": 1997
+    },
+    {
+      "icon": {
+        "paths": [
+          "M16,8a8,8,0,1,0-8,8H8a8,8,0,0,0,8-8"
+        ],
+        "attrs": [
+          {
+            "fill": "#3b69ff"
+          }
+        ],
+        "isMulticolor": false,
+        "isMulticolor2": false,
+        "grid": 0,
+        "tags": [
+          "feedback-view-off",
+          "feedback-view-off-0"
+        ]
+      },
+      "attrs": [
+        {
+          "fill": "#3b69ff"
+        }
+      ],
+      "properties": {
+        "order": 2007,
+        "id": 2003,
+        "name": "feedback-view-off-0",
+        "prevSize": 32,
+        "code": 61646
+      },
+      "setIdx": 0,
+      "setId": 2,
+      "iconIdx": 1998
+    },
+    {
+      "icon": {
+        "paths": [
+          "M8.377,5.513v6.735a.375.375,0,0,1-.75,0V5.513a.375.375,0,0,1,.75,0ZM8,3.377H8a.377.377,0,0,0-.376.378h0A.376.376,0,0,0,8,4.132H8a.377.377,0,0,0,.377-.378h0A.377.377,0,0,0,8,3.377Z"
+        ],
+        "attrs": [
+          {
+            "fill": "#fff"
+          }
+        ],
+        "isMulticolor": false,
+        "isMulticolor2": false,
+        "grid": 0,
+        "tags": [
+          "feedback-view-off",
+          "feedback-view-off-1"
+        ]
+      },
+      "attrs": [
+        {
+          "fill": "#fff"
+        }
+      ],
+      "properties": {
+        "order": 2008,
+        "id": 2004,
+        "name": "feedback-view-off-1",
+        "prevSize": 32,
+        "code": 61647
+      },
+      "setIdx": 0,
+      "setId": 2,
+      "iconIdx": 1999
+    },
+    {
+      "icon": {
+        "paths": [
+          "M8,8m-8,0a8,8 0 1,0 16,0a8,8 0 1,0 -16,0"
+        ],
+        "attrs": [
+          {
+            "fill": "#e1173f"
+          }
+        ],
+        "isMulticolor": false,
+        "isMulticolor2": false,
+        "grid": 0,
+        "tags": [
+          "feedback-view-on",
+          "feedback-view-on-0"
+        ]
+      },
+      "attrs": [
+        {
+          "fill": "#e1173f"
+        }
+      ],
+      "properties": {
+        "order": 2009,
+        "id": 2005,
+        "name": "feedback-view-on-0",
+        "prevSize": 32,
+        "code": 61648
+      },
+      "setIdx": 0,
+      "setId": 2,
+      "iconIdx": 2000
+    },
+    {
+      "icon": {
+        "paths": [
+          "M11.181,4.819a.374.374,0,0,1,0,.53L8.53,8l2.651,2.651a.375.375,0,0,1-.53.531L8,8.531l-2.651,2.65a.375.375,0,0,1-.53-.53L7.469,8,4.818,5.349a.375.375,0,0,1,.531-.53L8,7.47l2.651-2.651A.374.374,0,0,1,11.181,4.819Z"
+        ],
+        "attrs": [
+          {
+            "fill": "#fff"
+          }
+        ],
+        "isMulticolor": false,
+        "isMulticolor2": false,
+        "grid": 0,
+        "tags": [
+          "feedback-view-on",
+          "feedback-view-on-1"
+        ]
+      },
+      "attrs": [
+        {
+          "fill": "#fff"
+        }
+      ],
+      "properties": {
+        "order": 2010,
+        "id": 2006,
+        "name": "feedback-view-on-1",
+        "prevSize": 32,
+        "code": 61649
+      },
+      "setIdx": 0,
+      "setId": 2,
+      "iconIdx": 2001
+    },
+    {
+      "icon": {
+        "paths": [
+          "M14.375,8A.375.375,0,0,1,14,8.375H2a.375.375,0,0,1,0-.75H14A.375.375,0,0,1,14.375,8Z"
+        ],
+        "attrs": [
+          {
+            "fill": "#cc092f"
+          }
+        ],
+        "isMulticolor": false,
+        "isMulticolor2": false,
+        "grid": 0,
+        "tags": [
+          "ui-minus",
+          "ui-minus-0"
+        ]
+      },
+      "attrs": [
+        {
+          "fill": "#cc092f"
+        }
+      ],
+      "properties": {
+        "order": 2011,
+        "id": 2007,
+        "name": "ui-minus-0",
+        "prevSize": 32,
+        "code": 61650
+      },
+      "setIdx": 0,
+      "setId": 2,
+      "iconIdx": 2002
+    }
+  ],
+  "height": 1024
+}
