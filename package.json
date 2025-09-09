@@ -11,8 +11,15 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
+    "abs-svg-path": "^0.1.1",
+    "parse-svg-path": "^0.1.2",
+    "serialize-svg-path": "^0.1.0",
+    "svg-path-commander": "^2.1.11",
+    "svg-path-parser": "^1.1.0",
     "svg2ttf": "^6.0.3",
     "svgicons2svgfont": "^15.0.1",
+    "svgo": "^4.0.0",
+    "svgpath": "^2.6.0",
     "svgson": "^5.3.1",
     "ttf2eot": "^3.1.0",
     "ttf2woff": "^3.0.0"

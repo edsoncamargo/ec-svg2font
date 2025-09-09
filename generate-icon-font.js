@@ -1,38 +1,139 @@
 import { Readable } from 'stream';
 import { SVGIcons2SVGFontStream } from 'svgicons2svgfont';
+import { execSync } from 'child_process'; // Para chamar o SVGO a partir do script
 import fs from 'fs';
-import { parse } from 'svgson';
+import { parse } from 'svgson'; // Para a leitura e manipulação de SVGs mais complexa se necessário
 import path from 'path';
+import pkg from 'svg-path-parser';
 import svg2ttf from 'svg2ttf';
 import ttf2eot from 'ttf2eot';
 import ttf2woff from 'ttf2woff';
 
+const { parseSVGPath } = pkg;
+
 /**
- * Config
+ * Configurações
  */
 const JSON_PATH = './selection.json'; // JSON do IcoMoon existente
-const SVG_DIR = './svgs'; // Pasta com novos SVGs
+const SVG_DIR = './svgs'; // Pasta com novos SVGs (DEVE SER PRÉ-PROCESSADO COM SVGO)
 const OUTPUT_DIR = './dist'; // Saída das fontes e CSS
 const FONT_NAME = 'icons'; // Nome da fonte
 const PREFIX = 'brad-icon-'; // Prefixo CSS
+const FONT_HEIGHT = 512; // Altura padrão da fonte (ajusta o viewBox interno dos ícones)
 
-if (!fs.existsSync(OUTPUT_DIR)) fs.mkdirSync(OUTPUT_DIR);
+// Garante que o diretório de saída exista
+if (!fs.existsSync(OUTPUT_DIR)) {
+  fs.mkdirSync(OUTPUT_DIR, { recursive: true });
+}
 
 /**
- * Função para extrair paths do SVG
+ * Otimiza SVGs usando SVGO (opcionalmente pode ser executado manualmente)
+ * Isso garante que todos os SVGs tenham um viewBox consistente e
+ * removam elementos desnecessários que podem causar problemas.
  */
+async function optimizeSVGs() {
+  console.log('Otimizando SVGs com SVGO...');
+  try {
+    // Limpa a pasta de SVGs que serão otimizados (opcional)
+    // Ou cria uma subpasta para os SVGs otimizados
+    const optimizedSvgDir = path.join(OUTPUT_DIR, 'optimized_svgs');
+    if (!fs.existsSync(optimizedSvgDir)) {
+      fs.mkdirSync(optimizedSvgDir);
+    }
+
+    const svgFiles = fs.readdirSync(SVG_DIR).filter((f) => f.endsWith('.svg'));
+
+    for (const file of svgFiles) {
+      const inputPath = path.join(SVG_DIR, file);
+      const outputPath = path.join(optimizedSvgDir, file);
+
+      // Chama o SVGO via linha de comando. Ajuste o comando se o SVGO não estiver instalado globalmente.
+      // Se o SVGO estiver instalado como dependência: `node node_modules/.bin/svgo ...`
+      execSync(
+        `svgo --config=svgo.config.js --input="${inputPath}" --output="${outputPath}"`
+      );
+      console.log(`SVG otimizado: ${file}`);
+    }
+    // Retorna o diretório de SVGs otimizados para serem usados pelo script
+    return optimizedSvgDir;
+  } catch (error) {
+    console.error('Erro ao otimizar SVGs:', error);
+    throw error; // Para a execução se a otimização falhar
+  }
+}
+
+/**
+ * Função para extrair paths do SVG otimizado.
+ * Agora, assume que o SVG já tem um viewBox e atributos limpos.
+ */
+
 async function getPathsFromSVG(filePath) {
   const content = fs.readFileSync(filePath, 'utf-8');
   const svgJson = await parse(content);
   const paths = [];
 
+  const viewBox = svgJson.attributes?.viewBox;
+  let scaleFactor = 1;
+  if (viewBox) {
+    const [, , width, height] = viewBox.split(' ').map(Number);
+    const maxDimension = Math.max(width, height);
+    if (maxDimension > 0) {
+      scaleFactor = FONT_HEIGHT / maxDimension;
+    }
+  }
+
   function traverse(node) {
-    if (node.name === 'path' && node.attributes?.d)
-      paths.push(node.attributes.d);
-    if (node.children) node.children.forEach(traverse);
+    if (node.name === 'path' && node.attributes?.d) {
+      const originalPath = node.attributes.d;
+      let scaledPath = '';
+      try {
+        if (typeof parseSVGPath === 'function') {
+          const parsedCommands = parseSVGPath(originalPath);
+          scaledPath = parsedCommands
+            .map((cmd) => {
+              let commandString = cmd.command;
+              const coordinateKeys = [
+                'x',
+                'y',
+                'x1',
+                'y1',
+                'x2',
+                'y2',
+                'rx',
+                'ry',
+                'r',
+              ]; // Include 'r' for arcs/circles
+
+              // Process each coordinate key that exists on the command
+              coordinateKeys.forEach((key) => {
+                if (cmd[key] !== undefined) {
+                  // Ensure the key is appended with its scaled value
+                  // We append directly here to preserve command structure like 'M x y'
+                  commandString += ` ${cmd[key] * scaleFactor}`;
+                }
+              });
+              return commandString;
+            })
+            .join(' '); // Join all transformed commands
+        } else {
+          console.warn(
+            'parseSVGPath is not a function. Skipping path scaling.'
+          );
+          scaledPath = originalPath;
+        }
+      } catch (error) {
+        console.error(`Erro ao processar o path em ${filePath}:`, error);
+        scaledPath = originalPath;
+      }
+      paths.push(scaledPath || originalPath);
+    }
+    if (node.children) {
+      node.children.forEach(traverse);
+    }
   }
 
   traverse(svgJson);
+
   return paths;
 }
 
@@ -44,117 +145,148 @@ const icomoonJson = JSON.parse(fs.readFileSync(JSON_PATH, 'utf-8'));
 /**
  * Descobre os próximos índices e código Unicode
  */
-let nextId = Math.max(...icomoonJson.icons.map((i) => i.properties.id)) + 1;
-let nextCode = Math.max(...icomoonJson.icons.map((i) => i.properties.code)) + 1;
+let nextId =
+  Math.max(0, ...icomoonJson.icons.map((i) => i.properties.id || 0)) + 1;
+let nextCode =
+  Math.max(0xea01, ...icomoonJson.icons.map((i) => i.properties.code || 0)) + 1; // Começa de um código Unicode privado comum
 let nextOrder =
-  Math.max(...icomoonJson.icons.map((i) => i.properties.order)) + 1;
-let nextIconIdx = Math.max(...icomoonJson.icons.map((i) => i.iconIdx)) + 1;
+  Math.max(0, ...icomoonJson.icons.map((i) => i.properties.order || 0)) + 1;
+let nextIconIdx =
+  Math.max(0, ...icomoonJson.icons.map((i) => i.iconIdx || 0)) + 1;
 
 /**
- * Adiciona ou substitui cada SVG da pasta
+ * Adiciona ou substitui cada SVG da pasta otimizada
  */
-const svgFiles = fs.readdirSync(SVG_DIR).filter((f) => f.endsWith('.svg'));
+async function processSVGs() {
+  const optimizedSvgDir = await optimizeSVGs(); // Otimiza os SVGs primeiro
+  const svgFiles = fs
+    .readdirSync(optimizedSvgDir)
+    .filter((f) => f.endsWith('.svg'));
 
-for (const file of svgFiles) {
-  const paths = await getPathsFromSVG(path.join(SVG_DIR, file));
-  const name = path.basename(file, '.svg');
+  for (const file of svgFiles) {
+    const filePath = path.join(optimizedSvgDir, file);
+    const paths = await getPathsFromSVG(filePath);
+    const name = path.basename(file, '.svg');
 
-  const existingIndex = icomoonJson.icons.findIndex(
-    (i) => i.properties.name === name
-  );
+    if (paths.length === 0) {
+      console.warn(
+        `Aviso: Nenhum path encontrado em ${file}. Ícone será ignorado.`
+      );
+      continue;
+    }
 
-  const novoIcone = {
-    icon: {
-      paths,
-      attrs: [{}],
-      isMulticolor: false,
-      isMulticolor2: false,
-      grid: 0,
-      tags: [name],
-    },
-    attrs: [{}],
-    properties: {
-      order:
+    const existingIndex = icomoonJson.icons.findIndex(
+      (i) => i.properties.name === name
+    );
+
+    const novoIcone = {
+      icon: {
+        paths: [paths.join(' ')], // Junta todos os paths em um único string
+        attrs: [{}], // Atributos do ícone (geralmente vazios para fontes simples)
+        isMulticolor: false,
+        isMulticolor2: false,
+        grid: 0,
+        tags: [name],
+      },
+      attrs: [{}], // Atributos do set de ícones
+      properties: {
+        order:
+          existingIndex >= 0
+            ? icomoonJson.icons[existingIndex].properties.order
+            : nextOrder++,
+        id:
+          existingIndex >= 0
+            ? icomoonJson.icons[existingIndex].properties.id
+            : nextId++,
+        name,
+        prevSize: 32, // Valor padrão, pode ser ajustado
+        code:
+          existingIndex >= 0
+            ? icomoonJson.icons[existingIndex].properties.code
+            : nextCode++,
+      },
+      setIdx: 0, // Índice do set (geralmente 0)
+      setId: 2, // ID do set (pode ser ajustado)
+      iconIdx:
         existingIndex >= 0
-          ? icomoonJson.icons[existingIndex].properties.order
-          : nextOrder++,
-      id:
-        existingIndex >= 0
-          ? icomoonJson.icons[existingIndex].properties.id
-          : nextId++,
-      name,
-      prevSize: 32,
-      code:
-        existingIndex >= 0
-          ? icomoonJson.icons[existingIndex].properties.code
-          : nextCode++,
-    },
-    setIdx: 0,
-    setId: 2,
-    iconIdx:
-      existingIndex >= 0
-        ? icomoonJson.icons[existingIndex].iconIdx
-        : nextIconIdx++,
-  };
+          ? icomoonJson.icons[existingIndex].iconIdx
+          : nextIconIdx++,
+    };
 
-  if (existingIndex >= 0) {
-    icomoonJson.icons[existingIndex] = novoIcone;
-    console.log(`Substituído: ${name}`);
-  } else {
-    icomoonJson.icons.push(novoIcone);
-    console.log(`Adicionado: ${name}`);
+    if (existingIndex >= 0) {
+      icomoonJson.icons[existingIndex] = novoIcone;
+      console.log(`Substituído: ${name}`);
+    } else {
+      icomoonJson.icons.push(novoIcone);
+      console.log(`Adicionado: ${name}`);
+    }
   }
-}
 
-/**
- * Salva o JSON atualizado
- */
-const UPDATED_JSON_PATH = path.join(OUTPUT_DIR, 'icons.json');
-fs.writeFileSync(UPDATED_JSON_PATH, JSON.stringify(icomoonJson, null, 2));
-console.log('JSON atualizado salvo em:', UPDATED_JSON_PATH);
+  /**
+   * Salva o JSON atualizado
+   */
+  const UPDATED_JSON_PATH = path.join(OUTPUT_DIR, 'icons.json');
+  fs.writeFileSync(UPDATED_JSON_PATH, JSON.stringify(icomoonJson, null, 2));
+  console.log('JSON atualizado salvo em:', UPDATED_JSON_PATH);
+}
 
 /**
  * Gera SVG Font
  */
-const fontStream = new SVGIcons2SVGFontStream({
-  fontName: FONT_NAME,
-  normalize: true,
-  fontHeight: icomoonJson.height || 1024,
-});
-const svgFontPath = path.join(OUTPUT_DIR, `${FONT_NAME}.svg`);
-const svgFontWriteStream = fs.createWriteStream(svgFontPath);
-fontStream.pipe(svgFontWriteStream);
+async function generateSVGFont() {
+  const fontStream = new SVGIcons2SVGFontStream({
+    fontName: FONT_NAME,
+    normalize: true,
+    centerHorizontally: true,
+    centerVertically: true,
+    metadata: null,
+  });
 
-icomoonJson.icons.forEach((icon) => {
-  const svgContent = `<svg><path d="${icon.icon.paths.join(' ')}"/></svg>`;
-  const glyphStream = new Readable();
-  glyphStream.push(svgContent);
-  glyphStream.push(null);
-  glyphStream.metadata = {
-    unicode: [String.fromCodePoint(icon.properties.code)],
-    name: icon.properties.name,
-  };
-  fontStream.write(glyphStream);
-});
+  const svgFontPath = path.join(OUTPUT_DIR, `${FONT_NAME}.svg`);
+  const svgFontWriteStream = fs.createWriteStream(svgFontPath);
+  fontStream.pipe(svgFontWriteStream);
 
-fontStream.end();
+  icomoonJson.icons.forEach((icon) => {
+    // Cria um SVG simples para cada path, garantindo que ele seja processado corretamente
+    const svgContent = `<svg><path d="${icon.icon.paths.join(' ')}"/></svg>`;
+    const glyphStream = new Readable();
+    glyphStream.push(svgContent);
+    glyphStream.push(null);
+    glyphStream.metadata = {
+      unicode: [String.fromCodePoint(icon.properties.code)],
+      name: icon.properties.name,
+    };
+    fontStream.write(glyphStream);
+  });
+
+  fontStream.end();
+
+  return new Promise((resolve, reject) => {
+    svgFontWriteStream.on('finish', resolve);
+    svgFontWriteStream.on('error', reject);
+  });
+}
 
 /**
- * Quando terminar, converte para TTF, WOFF e EOT e gera demo
+ * Converte a fonte SVG para outros formatos e gera CSS/HTML
  */
-svgFontWriteStream.on('finish', async () => {
+async function convertAndGenerateOutputs() {
+  const svgFontPath = path.join(OUTPUT_DIR, `${FONT_NAME}.svg`);
   const svgFont = fs.readFileSync(svgFontPath, 'utf-8');
 
+  // Converte para TTF
   const ttf = svg2ttf(svgFont, {});
   const ttfPath = path.join(OUTPUT_DIR, `${FONT_NAME}.ttf`);
   fs.writeFileSync(ttfPath, Buffer.from(ttf.buffer));
 
+  // Converte para EOT
   const eot = ttf2eot(Buffer.from(ttf.buffer));
   fs.writeFileSync(
     path.join(OUTPUT_DIR, `${FONT_NAME}.eot`),
     Buffer.from(eot.buffer)
   );
 
+  // Converte para WOFF
   const woff = ttf2woff(ttf);
   fs.writeFileSync(
     path.join(OUTPUT_DIR, `${FONT_NAME}.woff`),
@@ -212,7 +344,9 @@ body { font-family: sans-serif; padding: 20px; }
     html += `
 <div class="icon-box">
   <span class="${PREFIX}${icon.properties.name}"></span>
-  <span class="icon-name">${icon.properties.name} - </br> /${icon.properties.code} </span>
+  <span class="icon-name">${
+    icon.properties.name
+  } - </br> /${icon.properties.code.toString(16)} </span>
 </div>
 `;
   });
@@ -226,6 +360,19 @@ body { font-family: sans-serif; padding: 20px; }
   fs.writeFileSync(htmlPath, html);
   console.log('index.html de demo gerado em:', htmlPath);
 
+  // Salva o JSON atualizado novamente após a geração dos arquivos
   fs.writeFileSync(JSON_PATH, JSON.stringify(icomoonJson, null, 2));
   console.log('selection.json atualizado com os novos ícones!');
-});
+}
+
+/**
+ * Execução principal
+ */
+async function main() {
+  await processSVGs(); // Processa e atualiza o JSON com os novos ícones
+  await generateSVGFont(); // Gera o arquivo .svg da fonte
+  await convertAndGenerateOutputs(); // Converte para outros formatos e gera CSS/HTML
+  console.log('Processo de geração de fontes concluído!');
+}
+
+main().catch(console.error);
