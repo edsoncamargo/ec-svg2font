@@ -79,37 +79,41 @@ export async function generateSVGFont(
       (m) => m.name === fileGlyph.name
     );
 
-    if (foundOriginalIcon && foundOriginalIcon.svg) {
-      // --- Ícone antigo que ainda existe e tinha SVG no JSON: Preserva SVG e código ---
-      glyphContent = foundOriginalIcon.svg;
-      code = foundOriginalIcon.code; // Mantém o código original
-      finalIconDefinition = {
-        ...fileGlyph, // Usa file/name de 'files', mas garante code/svg do original
-        code: code,
-        svg: glyphContent,
-      };
-    } else {
-      // --- Novo ícone ou ícone antigo sem SVG no JSON: Lê o SVG do disco e atribui um novo código ---
-      try {
-        glyphContent = fs.readFileSync(
-          path.join(inputDir, fileGlyph.file),
-          'utf8'
-        );
+    // --- Lógica atualizada: Sempre tenta ler o SVG do disco se o arquivo existe ---
+    try {
+      glyphContent = fs.readFileSync(
+        path.join(inputDir, fileGlyph.file),
+        'utf8'
+      );
+
+      if (foundOriginalIcon) {
+        // --- Ícone antigo que ainda existe: Preserva seu código original ---
+        // O conteúdo do SVG é lido do disco, atualizando-o.
+        code = foundOriginalIcon.code; // Mantém o código original
+        finalIconDefinition = {
+          file: fileGlyph.file,
+          name: fileGlyph.name,
+          code: code,
+          svg: glyphContent, // Usa o conteúdo SVG do disco
+        };
+      } else {
+        // --- Novo ícone: Atribui um novo código e usa o SVG do disco ---
         code = currentCodeOffset.toString(16).toUpperCase();
         currentCodeOffset++; // Incrementa para o próximo novo ícone
 
         finalIconDefinition = {
-          ...fileGlyph, // Usa file/name de 'files'
+          file: fileGlyph.file,
+          name: fileGlyph.name,
           code: code,
-          svg: glyphContent,
+          svg: glyphContent, // Usa o conteúdo SVG do disco
         };
-      } catch (error) {
-        console.error(
-          `Erro ao ler o arquivo SVG ${fileGlyph.file} para o ícone ${fileGlyph.name}:`,
-          error
-        );
-        continue; // Pula este ícone se não puder ser lido
       }
+    } catch (error) {
+      console.error(
+        `Erro ao ler o arquivo SVG ${fileGlyph.file} para o ícone ${fileGlyph.name}:`,
+        error
+      );
+      continue; // Pula este ícone se não puder ser lido
     }
 
     // Se não obtivemos conteúdo SVG por algum motivo, pula

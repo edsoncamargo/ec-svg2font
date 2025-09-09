@@ -84,7 +84,9 @@ export class FontGenerator {
               file: item.file || `${item.name}.svg`,
               name: item.name,
               code: item.code,
-              svg: typeof item.svg === 'string' ? item.svg : undefined,
+              // Não carregamos mais o SVG diretamente do JSON aqui,
+              // a leitura do disco será feita em glyph.helper.ts
+              svg: undefined, // Garantimos que não carregamos o SVG
             }));
         }
       } catch (e) {
@@ -175,7 +177,6 @@ export class FontGenerator {
   private async exportFonts(svgFont: string, mapping: IconDefinition[]) {
     const exporters = ExporterFactory.create(this.exportTypes);
     for (const exporter of exporters) {
-      // A chamada original estava errada. Corrigimos para passar apenas os argumentos corretos.
       await exporter.export(this.fontName, this.outputDir, svgFont, mapping);
     }
   }
@@ -202,7 +203,6 @@ export class FontGenerator {
       // Exporta apenas o JSON e HTML se não houver alterações nas fontes
       const exporters = ExporterFactory.create(['json', 'html']);
       for (const exporter of exporters) {
-        // Passa o mapping completo (finalMapping que é igual ao existingMapping neste caso)
         await exporter.export(
           this.fontName,
           this.outputDir,
