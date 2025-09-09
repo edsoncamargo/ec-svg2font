@@ -122,6 +122,7 @@ const fontStream = new SVGIcons2SVGFontStream({
   centerHorizontally: true,
   centerVertically: true,
   metadata: null,
+  preserveAspectRatio: true,
 });
 const svgFontPath = path.join(OUTPUT_DIR, `${FONT_NAME}.svg`);
 const svgFontWriteStream = fs.createWriteStream(svgFontPath);
