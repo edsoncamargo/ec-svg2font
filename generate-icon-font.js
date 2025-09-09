@@ -212,7 +212,7 @@ body { font-family: sans-serif; padding: 20px; }
     html += `
 <div class="icon-box">
   <span class="${PREFIX}${icon.properties.name}"></span>
-  <span class="icon-name">${icon.properties.name}</span>
+  <span class="icon-name">${icon.properties.name} - </br> /${icon.properties.code} </span>
 </div>
 `;
   });
