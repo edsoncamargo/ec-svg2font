@@ -4,7 +4,8 @@
   "description": "",
   "main": "generate-icon-font.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "svgo-single": "svgo"
   },
   "keywords": [],
   "author": "",
@@ -18,13 +19,13 @@
     "svg-path-parser": "^1.1.0",
     "svg2ttf": "^6.0.3",
     "svgicons2svgfont": "^15.0.1",
-    "svgo": "^4.0.0",
     "svgpath": "^2.6.0",
     "svgson": "^5.3.1",
     "ttf2eot": "^3.1.0",
     "ttf2woff": "^3.0.0"
   },
   "devDependencies": {
-    "@types/node": "^24.3.1"
+    "@types/node": "^24.3.1",
+    "svgo": "^4.0.0"
   }
 }
