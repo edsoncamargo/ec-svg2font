@@ -22,15 +22,10 @@ export class FontGenerator {
     'html',
   ];
 
-  // Mapeamento completo carregado do JSON
   private existingMapping: IconDefinition[] = [];
-  // Mapeamento final a ser exportado
   private finalMapping: IconDefinition[] = [];
-  // Ícones que existem no disco e já tinham mapeamento (mantêm seus códigos e posições)
   private validExistingIcons: FileGlyph[] = [];
-  // Ícones que estavam no JSON mas foram removidos do disco (serão preservados no finalMapping)
   private removedIconsFromMapping: IconDefinition[] = [];
-  // Novos ícones que não estavam no JSON
   private newFileIcons: FileGlyph[] = [];
 
   constructor() {}
@@ -84,9 +79,8 @@ export class FontGenerator {
               file: item.file || `${item.name}.svg`,
               name: item.name,
               code: item.code,
-              // Não carregamos mais o SVG diretamente do JSON aqui,
-              // a leitura do disco será feita em glyph.helper.ts
-              svg: undefined, // Garantimos que não carregamos o SVG
+              // 🔑 preserva o svg se já existir no JSON
+              svg: item.svg || undefined,
             }));
         }
       } catch (e) {
@@ -107,19 +101,14 @@ export class FontGenerator {
       .filter((f) => f.endsWith('.svg'));
     const allFileNames = allSvgFiles.map((f) => path.basename(f));
 
-    // 1. Ícones que estavam no JSON E ainda existem como arquivo .svg
-    // Estes irao manter seus codigos originais e serao processados primeiro.
     this.validExistingIcons = this.existingMapping
       .filter((m) => allFileNames.includes(m.file))
-      .map((m) => ({ file: m.file, name: m.name, code: m.code })); // Mantém o code original
+      .map((m) => ({ file: m.file, name: m.name, code: m.code }));
 
-    // 2. Ícones que estavam no JSON, mas o arquivo .svg NÃO existe mais no disco.
-    // Estes serão PRESERVADOS no mapeamento final.
     this.removedIconsFromMapping = this.existingMapping.filter(
       (m) => !allFileNames.includes(m.file)
     );
 
-    // 3. Novos ícones: arquivos .svg no disco que NÃO estavam no mapeamento existente.
     this.newFileIcons = allSvgFiles
       .filter(
         (fileName) =>
@@ -127,13 +116,11 @@ export class FontGenerator {
             (mappedItem) => mappedItem.file === fileName
           )
       )
-      .map((f) => ({ file: f, name: path.basename(f, '.svg') })); // Novos ícones não têm code aqui
+      .map((f) => ({ file: f, name: path.basename(f, '.svg') }));
   }
 
   private getNextStartCode() {
     let maxCode = this.startCode;
-    // Procura o maior código hexadecimal em todo o mapeamento existente (incluindo os removidos)
-    // para garantir que novos códigos sequenciais não o sobrescrevam.
     this.existingMapping.forEach((icon) => {
       if (icon.code) {
         const codeInt = parseInt(icon.code, 16);
@@ -148,29 +135,21 @@ export class FontGenerator {
   private async generateSVGFont() {
     const startCodeForNew = this.getNextStartCode();
 
-    // A lista de ícones a serem processados agora inclui:
-    // 1. Ícones existentes válidos (mantendo seus códigos originais).
-    // 2. Novos ícones (que receberão novos códigos).
     const glyphsToProcessCombined = [
       ...this.validExistingIcons,
       ...this.newFileIcons,
     ];
 
-    // A função generateSVGFont é responsável por processar 'glyphsToProcessCombined',
-    // preservar códigos originais, atribuir novos códigos, e
-    // DEVOLVER um mapeamento que JÁ INCLUI os ícones removidos.
     const { svgFont, mapping } = await generateSVGFont({
       inputDir: this.inputDir,
       fontName: this.fontName,
       outputDir: this.outputDir,
-      startCode: startCodeForNew, // Usado apenas para atribuir códigos a NEW ícones.
-      files: glyphsToProcessCombined, // Passa a lista combinada de ícones
-      existingMapping: this.existingMapping, // Passa o mapeamento completo para preserve os removidos
+      startCode: startCodeForNew,
+      files: glyphsToProcessCombined,
+      existingMapping: this.existingMapping,
     });
 
-    // O 'mapping' retornado por generateSVGFont é o mapeamento FINAL completo.
     this.finalMapping = mapping;
-
     return { svgFont, mapping: this.finalMapping };
   }
 
@@ -186,21 +165,16 @@ export class FontGenerator {
     this.loadExistingMapping();
     this.scanFiles();
 
-    // Verifica se há ícones novos OU ícones existentes válidos que precisam ser processados
-    // para a fonte. Se não houver, o processo de geração de fonte é pulado.
     if (this.validExistingIcons.length > 0 || this.newFileIcons.length > 0) {
       const { svgFont, mapping } = await this.generateSVGFont();
-      this.finalMapping = mapping; // O mapping retornado já é o final completo
+      this.finalMapping = mapping;
       await this.exportFonts(svgFont, this.finalMapping);
     } else {
-      // Caso não haja ícones novos ou modificados nos arquivos SVG,
-      // apenas preservamos o mapeamento existente (que inclui os removidos).
       console.log(
         'Nenhum ícone novo ou modificado encontrado. Preservando ícones existentes do JSON.'
       );
       this.finalMapping = this.existingMapping;
 
-      // Exporta apenas o JSON e HTML se não houver alterações nas fontes
       const exporters = ExporterFactory.create(['json', 'html']);
       for (const exporter of exporters) {
         await exporter.export(

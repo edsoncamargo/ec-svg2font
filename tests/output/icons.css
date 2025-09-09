@@ -24,5 +24,6 @@
   -moz-osx-font-smoothing: grayscale;
 }
     
-.brad-icon-star-regular-full::before { content: "\E001"; font-family: "icons"; }
-.brad-icon-star-half-solid-full::before { content: "\E002"; font-family: "icons"; }
+.brad-icon-star-half-solid-full::before { content: "\E000"; font-family: "icons"; }
+.brad-icon-star-half-solid-full copy 2::before { content: "\E001"; font-family: "icons"; }
+.brad-icon-star-half-solid-full copy::before { content: "\E002"; font-family: "icons"; }
