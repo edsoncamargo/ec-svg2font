@@ -1,7 +1,6 @@
-export interface IconDefinition {
-  name: string;
-  code: string;
-}
+// types.ts
+
+import fs from 'fs';
 
 export interface GenerateOptions {
   inputDir?: string;
@@ -10,8 +9,6 @@ export interface GenerateOptions {
   startCode?: number;
   exportTypes?: string[];
 }
-
-import fs from 'fs';
 
 export interface GlyphStream extends fs.ReadStream {
   metadata?: {
@@ -25,3 +22,11 @@ export interface FileGlyph {
   name: string;
   code?: string;
 }
+
+// Interface que adiciona o campo SVG, herdando de FileGlyph
+export interface IconDefinition extends FileGlyph {
+  svg?: string; // Propriedade opcional para o conteúdo SVG
+  code: string; // Garante que o código sempre esteja presente no mapeamento final
+}
+
+// Não usaremos GlyphWithContent, pois IconDefinition já será suficiente
