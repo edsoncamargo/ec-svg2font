@@ -1,0 +1,13 @@
+@font-face {
+  font-family: 'icons';
+  src: url('icons.eot');
+  src: url('icons.eot?#iefix') format('embedded-opentype'),
+       url('icons.woff') format('woff'),
+       url('icons.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.brad-icon-star-regular-full:before { content: "\e900"; }
+.brad-icon-stopwatch-20-solid-full1:before { content: "\e901"; }
+.brad-icon-stopwatch-20-solid-full2:before { content: "\e902"; }
