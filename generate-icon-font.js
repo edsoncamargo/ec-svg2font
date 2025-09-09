@@ -27,8 +27,22 @@ async function getPathsFromSVG(filePath) {
   const paths = [];
 
   function traverse(node) {
-    if (node.name === 'path' && node.attributes?.d)
+    if (node.name === 'path' && node.attributes?.d) {
       paths.push(node.attributes.d);
+    } else if (
+      node.name === 'circle' &&
+      node.attributes?.cx &&
+      node.attributes?.cy &&
+      node.attributes?.r
+    ) {
+      const { cx, cy, r } = node.attributes;
+      const d = `M${cx},${cy}m-${r},0a${r},${r} 0 1,0 ${
+        r * 2
+      },0a${r},${r} 0 1,0 -${r * 2},0`;
+      paths.push(d);
+    } else if (node.name === 'g') {
+      if (node.children) node.children.forEach(traverse);
+    }
     if (node.children) node.children.forEach(traverse);
   }
 
