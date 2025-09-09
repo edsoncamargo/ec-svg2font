@@ -1,4 +1,4 @@
-import { FontGenerator } from './../src/main';
+import { FontGenerator } from './../src/font-generator';
 
 async function main() {
   await new FontGenerator()

@@ -15,6 +15,7 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@supabase/supabase-js": "^2.57.2",
     "commander": "^14.0.0",
     "svg2ttf": "^6.0.3",
     "svgicons2svgfont": "^15.0.1",
@@ -27,6 +28,7 @@
     "@types/svg2ttf": "^5.0.3",
     "@types/ttf2eot": "^2.0.2",
     "@types/ttf2woff": "^2.0.4",
+    "dotenv": "^17.2.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.2"
   }
